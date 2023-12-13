@@ -22,4 +22,7 @@ class AlertService {
         throw Exception("user not found")
         return alertRepository.save(alert)
     }
+
+    fun findAllByUserId(id: Long) = alertRepository.findAlertsByUserId(id)
+
 }

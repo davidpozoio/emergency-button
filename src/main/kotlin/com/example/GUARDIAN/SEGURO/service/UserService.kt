@@ -1,5 +1,6 @@
 package com.example.GUARDIAN.SEGURO.service
 
+import com.example.GUARDIAN.SEGURO.model.Alert
 import com.example.GUARDIAN.SEGURO.model.User
 import com.example.GUARDIAN.SEGURO.repository.UserRepository
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,5 +33,9 @@ class UserService {
         }
 
         return userRepository.save(patchedUser)
+    }
+
+    fun delete(id: Long){
+        return userRepository.deleteById(id)
     }
 }
