@@ -25,4 +25,5 @@ class AlertService {
 
     fun findAllByUserId(id: Long) = alertRepository.findAlertsByUserId(id)
 
+    fun delete(id: Long) = alertRepository.deleteById(id)
 }
