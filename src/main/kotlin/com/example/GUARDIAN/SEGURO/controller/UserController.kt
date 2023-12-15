@@ -25,10 +25,6 @@ class UserController {
     @GetMapping("/{id}")
     fun getById(@PathVariable id: Long?) = userService.findById(id)
 
-    @PostMapping
-    fun save(@RequestBody user: User) = userService.save(user)
-
-
     @PatchMapping
     fun patch(@RequestBody user: User) = userService.patch(user)
 
