@@ -3,14 +3,14 @@ package com.example.GUARDIAN.SEGURO.filters
 import com.example.GUARDIAN.SEGURO.global.Roles
 import com.example.GUARDIAN.SEGURO.service.TokenService
 import com.example.GUARDIAN.SEGURO.service.UserService
+import com.example.GUARDIAN.SEGURO.utils.HttpExceptionUnauthorized
 import com.example.GUARDIAN.SEGURO.utils.getJwtCookie
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Lazy
-import org.springframework.http.HttpStatus
-import org.springframework.web.client.HttpClientErrorException
+import org.springframework.http.HttpMethod
 import org.springframework.web.filter.OncePerRequestFilter
 
 class RoleValidatorFilter @Lazy @Autowired constructor(
@@ -32,9 +32,18 @@ class RoleValidatorFilter @Lazy @Autowired constructor(
         val hasUserAccess = roles.contains(user.role)
 
         if(!hasUserAccess){
-            throw HttpClientErrorException(HttpStatus.UNAUTHORIZED, "user doesn't have access")
+            throw HttpExceptionUnauthorized("the user doesn't have access")
         }
 
         filterChain.doFilter(request, response)
+    }
+
+    override fun shouldNotFilter(request: HttpServletRequest): Boolean {
+        var allowedMethods = listOf(HttpMethod.POST.toString())
+//        if(request.pathInfo == "/alerts"){
+//            return allowedMethods.contains(request.method.toString())
+//        }
+//        return false
+        return true
     }
 }

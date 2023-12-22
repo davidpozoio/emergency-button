@@ -1,12 +1,10 @@
 package com.example.GUARDIAN.SEGURO.service
 
 import com.example.GUARDIAN.SEGURO.global.SecretModule
+import com.example.GUARDIAN.SEGURO.utils.HttpExceptionUnauthorized
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
-import org.springframework.http.HttpStatus
-import org.springframework.http.HttpStatusCode
 import org.springframework.stereotype.Service
-import org.springframework.web.client.HttpClientErrorException
 
 @Service
 class TokenService {
@@ -23,7 +21,7 @@ class TokenService {
                 .build().parseSignedClaims(token)
             return claims.payload
         }catch (err: Exception){
-            throw HttpClientErrorException(HttpStatus.UNAUTHORIZED, "invalid token")
+            throw HttpExceptionUnauthorized("invalid token")
         }
     }
 }

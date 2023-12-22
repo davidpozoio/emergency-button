@@ -1,8 +1,8 @@
 package com.example.GUARDIAN.SEGURO.service
 
-import com.example.GUARDIAN.SEGURO.model.Alert
 import com.example.GUARDIAN.SEGURO.model.User
 import com.example.GUARDIAN.SEGURO.repository.UserRepository
+import com.example.GUARDIAN.SEGURO.utils.HttpExceptionNotFound
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Service
@@ -19,12 +19,12 @@ class UserService {
 
     fun findById(id: Long?): User{
         return userRepository.findById(id)?:
-        throw HttpClientErrorException(HttpStatus.NOT_FOUND, "user not found")
+        throw HttpExceptionNotFound("user not found")
 
     }
 
     fun findByEmail(email: String) = userRepository.findByEmail(email)?:
-    throw HttpClientErrorException(HttpStatus.NOT_FOUND, "user not found")
+    throw HttpExceptionNotFound("user not found")
     fun save(user: User): User{
         return userRepository.save(user)
     }

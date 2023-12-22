@@ -7,28 +7,30 @@ import com.example.GUARDIAN.SEGURO.service.UserService
 import org.springframework.boot.web.servlet.FilterRegistrationBean
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpMethod
 
 @Configuration
 class RoleValidatorConfig {
     @Bean
-    fun userRoleValidatorFiler(tokenService: TokenService, userService: UserService): FilterRegistrationBean<RoleValidatorFilter>{
+    fun userRoleValidatorFilter(tokenService: TokenService, userService: UserService): FilterRegistrationBean<RoleValidatorFilter>{
         val registrationBean = FilterRegistrationBean<RoleValidatorFilter>()
         registrationBean.filter = RoleValidatorFilter(tokenService,
             userService,
-            listOf(Roles.USER, Roles.ADMIN))
+            listOf(Roles.USER))
+
+        val allowedMethods = listOf(HttpMethod.POST.toString())
         registrationBean.addUrlPatterns("/alerts/*")
-        registrationBean.order = 1
+
         return  registrationBean
     }
 
     @Bean
-    fun adminRoleValidatorFiler(tokenService: TokenService, userService: UserService): FilterRegistrationBean<RoleValidatorFilter>{
+    fun adminRoleValidatorFilter(tokenService: TokenService, userService: UserService): FilterRegistrationBean<RoleValidatorFilter>{
         val registrationBean = FilterRegistrationBean<RoleValidatorFilter>()
         registrationBean.filter = RoleValidatorFilter(tokenService,
             userService,
             listOf(Roles.ADMIN))
         registrationBean.addUrlPatterns("/users/*")
-        registrationBean.order = 2
         return  registrationBean
     }
 }
