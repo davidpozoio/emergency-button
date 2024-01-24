@@ -5,12 +5,15 @@ import com.example.GUARDIAN.SEGURO.dto.RegisterDto
 import com.example.GUARDIAN.SEGURO.dto.UserDto
 import com.example.GUARDIAN.SEGURO.model.User
 import com.example.GUARDIAN.SEGURO.service.AuthService
+import com.example.GUARDIAN.SEGURO.service.TokenService
 import com.example.GUARDIAN.SEGURO.utils.createJwtCookie
 import com.example.GUARDIAN.SEGURO.utils.getJwtCookie
 import com.example.GUARDIAN.SEGURO.utils.parseRegisterDtoToUser
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
+import jakarta.validation.Valid
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
@@ -20,15 +23,32 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/auth")
 class AuthController(
-    private val authService: AuthService
+    private val authService: AuthService,
+    private val tokenService: TokenService
 ) {
     @PostMapping("/signup")
-    fun signup(@RequestBody user: RegisterDto): User{
-       return authService.signUp(parseRegisterDtoToUser(user))
+    fun signup(@Valid @RequestBody user: RegisterDto, bindingResult: BindingResult, response: HttpServletResponse): Any{
+        if (bindingResult.hasErrors()) {
+            // If there are validation errors, return a ResponseEntity with the error messages
+            val errorMessages = bindingResult.allErrors.map { it.defaultMessage }.toList()
+            return ResponseEntity.badRequest().body(mapOf("errors" to errorMessages))
+        }
+        val createdUser = authService.signUp(parseRegisterDtoToUser(user))
+        val token = tokenService.create(createdUser.id.toString())
+        val cookieJwt = createJwtCookie(token)
+        response.addCookie(cookieJwt)
+
+        return ResponseEntity.ok().body(createdUser.apply { password="" })
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody user: LoginDto, response: HttpServletResponse): ResponseEntity<UserDto>{
+    fun login(@Valid @RequestBody user: LoginDto, bindingResult: BindingResult, response: HttpServletResponse): ResponseEntity<*>{
+        if (bindingResult.hasErrors()) {
+            // If there are validation errors, return a ResponseEntity with the error messages
+            val errorMessages = bindingResult.allErrors.map { it.defaultMessage }.toList()
+            return ResponseEntity.badRequest().body(mapOf("errors" to errorMessages))
+        }
+
         val authUser = authService.login(user.email, user.password)
         val jwtCookie = createJwtCookie(authUser.token)
         response.addCookie(jwtCookie)

@@ -3,7 +3,6 @@ package com.example.GUARDIAN.SEGURO.utils
 import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import org.springframework.web.util.WebUtils
-import  com.example.GUARDIAN.SEGURO.utils.HttpExceptionUnauthorized
 
 fun getJwtCookie(request: HttpServletRequest): Cookie{
     val jwt = WebUtils.getCookie(request, "jwt")

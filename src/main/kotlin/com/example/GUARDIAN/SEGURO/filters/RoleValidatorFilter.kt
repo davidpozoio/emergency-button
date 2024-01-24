@@ -39,11 +39,11 @@ class RoleValidatorFilter @Lazy @Autowired constructor(
     }
 
     override fun shouldNotFilter(request: HttpServletRequest): Boolean {
-        var allowedMethods = listOf(HttpMethod.POST.toString())
+//        var allowedMethods = listOf(HttpMethod.POST.toString())
 //        if(request.pathInfo == "/alerts"){
 //            return allowedMethods.contains(request.method.toString())
 //        }
 //        return false
-        return true
-    }
+       return true
+  }
 }

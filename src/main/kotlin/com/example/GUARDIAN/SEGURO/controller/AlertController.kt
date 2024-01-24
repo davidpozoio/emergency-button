@@ -5,8 +5,10 @@ import com.example.GUARDIAN.SEGURO.service.AlertService
 import com.example.GUARDIAN.SEGURO.service.TokenService
 import com.example.GUARDIAN.SEGURO.utils.getJwtCookie
 import jakarta.servlet.http.HttpServletRequest
+import jakarta.validation.Valid
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.CrossOrigin
 import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
@@ -30,18 +32,24 @@ class AlertController {
     lateinit var tokenService: TokenService
 
     @GetMapping
-    fun findAll(@RequestParam userId: Long?): ResponseEntity<List<Alert>> {
+    fun findAll(@RequestParam userId: Long?): ResponseEntity<List<Any>> {
         userId ?: return ResponseEntity.ok(alertService.findAll())
 
         return ResponseEntity.ok(alertService.findAllByUserId(userId))
     }
 
     @PostMapping
-    fun save(@RequestBody alert: Alert, request: HttpServletRequest): Alert{
+    fun save(@Valid @RequestBody alert: Alert, bindingResult: BindingResult, request: HttpServletRequest): Any{
+        if (bindingResult.hasErrors()) {
+            // If there are validation errors, return a ResponseEntity with the error messages
+            val errorMessages = bindingResult.allErrors.map { it.defaultMessage }.toList()
+            return ResponseEntity.badRequest().body(mapOf("errors" to errorMessages))
+        }
+
         val cookieJwt = getJwtCookie(request)
         val decodedToken = tokenService.verify(cookieJwt.value)
         alert.apply { userId = decodedToken.subject.toLong() }
-        return alertService.save(alert)
+        return ResponseEntity.ok().body(alertService.save(alert))
     }
 
     @DeleteMapping("/{id}")

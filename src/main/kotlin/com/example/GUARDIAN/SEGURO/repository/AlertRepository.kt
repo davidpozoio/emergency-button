@@ -1,5 +1,6 @@
 package com.example.GUARDIAN.SEGURO.repository
 
+import com.example.GUARDIAN.SEGURO.dto.AlertDto
 import com.example.GUARDIAN.SEGURO.model.Alert
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
@@ -13,4 +14,8 @@ interface AlertRepository: JpaRepository<Alert, Long> {
     @Query("SELECT alert.* FROM users INNER JOIN alert on users.id = alert.user_id where users.id = :id",
         nativeQuery = true)
     fun findAlertsByUserId(id: Long): List<Alert>
+
+    @Query("SELECT alert.*, users.full_name as name FROM users INNER JOIN alert on users.id = alert.user_id",
+        nativeQuery = true)
+    fun findAllWithUserName(): List<Alert>
 }

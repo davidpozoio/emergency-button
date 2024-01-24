@@ -16,7 +16,7 @@ class RoleValidatorConfig {
         val registrationBean = FilterRegistrationBean<RoleValidatorFilter>()
         registrationBean.filter = RoleValidatorFilter(tokenService,
             userService,
-            listOf(Roles.USER))
+            listOf(Roles.USER, Roles.ADMIN))
 
         val allowedMethods = listOf(HttpMethod.POST.toString())
         registrationBean.addUrlPatterns("/alerts/*")

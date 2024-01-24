@@ -15,8 +15,11 @@ class AlertService {
     @Autowired
     lateinit var userRepository: UserRepository
 
-    fun findAll() = alertRepository.findAll()
+    fun findAll(): List<Any> {
+        val recentAlerts = alertRepository.findAllWithUserName()
 
+        return recentAlerts.sortedByDescending { it.createdAt }.take(3)
+    }
     fun save(alert: Alert): Alert{
         val user = userRepository.findById(alert.userId)?:
         throw HttpExceptionNotFound("user not found")
