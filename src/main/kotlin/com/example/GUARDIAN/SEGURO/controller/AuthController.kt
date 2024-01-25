@@ -9,6 +9,7 @@ import com.example.GUARDIAN.SEGURO.service.TokenService
 import com.example.GUARDIAN.SEGURO.utils.createJwtCookie
 import com.example.GUARDIAN.SEGURO.utils.getJwtCookie
 import com.example.GUARDIAN.SEGURO.utils.parseRegisterDtoToUser
+import jakarta.servlet.http.Cookie
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
@@ -75,5 +76,19 @@ class AuthController(
             latitude = user.latitude
             longitude = user.longitude
         })
+    }
+
+    @GetMapping("/logout")
+    fun logout(response: HttpServletResponse){
+        val deletedCookie = Cookie("jwt", null)
+
+        // Set the maxAge to 0 to instruct the browser to remove the cookie
+        deletedCookie.maxAge = 0
+
+        // Set the path attribute to match the path of the original cookie
+        deletedCookie.path = "/"
+
+        // Add the new cookie to the response
+        response.addCookie(deletedCookie)
     }
 }

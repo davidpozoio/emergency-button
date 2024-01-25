@@ -21,9 +21,10 @@ class AlertService {
         return recentAlerts.sortedByDescending { it.createdAt }.take(3)
     }
     fun save(alert: Alert): Alert{
-        val user = userRepository.findById(alert.userId)?:
+        val userReferenced = userRepository.findById(alert.userId)?:
         throw HttpExceptionNotFound("user not found")
-        return alertRepository.save(alert)
+
+        return alertRepository.save(alert.apply { user = userReferenced })
     }
 
     fun findAllByUserId(id: Long) = alertRepository.findAlertsByUserId(id)

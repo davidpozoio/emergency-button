@@ -40,4 +40,5 @@ class AuthService (
         val userId = decodedToken.subject.toLong()
         return userService.findById(userId)
     }
+
 }
