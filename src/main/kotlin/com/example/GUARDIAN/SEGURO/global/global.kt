@@ -9,4 +9,5 @@ object SecretModule{
 object Roles{
     val ADMIN = "ADMIN"
     val USER = "USER"
+    val GUARD = "GUARD"
 }

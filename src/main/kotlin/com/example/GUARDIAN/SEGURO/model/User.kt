@@ -16,7 +16,7 @@ class User {
     @Column(name = "full_name")
     var fullName: String = ""
     var gender: String = ""
-    @JsonIgnore
+
     var email: String = ""
     @JsonIgnore
     var password: String = ""
@@ -31,7 +31,7 @@ class User {
     var longitude: Double = (0).toDouble()
     @JsonIgnore
     var identification: String = ""
-    @JsonIgnore
+
     var role: String = Roles.USER
 
     fun comparePassword(password: String): Boolean{
