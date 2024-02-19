@@ -1,6 +1,7 @@
 package com.example.GUARDIAN.SEGURO.controller
 
 import com.example.GUARDIAN.SEGURO.utils.HttpExceptionUnauthorized
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
@@ -24,5 +25,12 @@ class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
             mapOf("message" to "there was an error: ${ex.message}")
         )
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException::class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    fun handleDuplicateKeyException(ex: DataIntegrityViolationException): ResponseEntity<*> {
+
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(mapOf<String, String>("message" to "email is already created"))
     }
 }
