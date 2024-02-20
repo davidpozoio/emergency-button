@@ -13,8 +13,10 @@ class CorsConfig: WebMvcConfigurer{
         registry.addMapping("/**")
             .allowedOrigins(
                 "http://localhost:8000",
-                "http://localhost:5173/")
+                "http://localhost:5173/",
+                "https://guardian-seguro-fronted.vercel.app")
             .allowedMethods("POST", "GET", "post")
             .allowCredentials(true)
+
     }
 }
