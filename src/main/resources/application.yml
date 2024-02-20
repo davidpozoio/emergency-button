@@ -17,7 +17,7 @@ spring:
     schemas: public
 
   datasource:
-    url: jdbc:postgresql://ep-wispy-river-a5mmnqbm.us-east-2.aws.neon.tech/GuardianEnLinea?user=jpmalla&password=DSTxMi3tOLk2&sslmode=require
-    username: jpmalla
-    password: DSTxMi3tOLk2
+    url: jdbc:postgresql://bubble.db.elephantsql.com/tcredics?socketTimeout=3
+    username: tcredics
+    password: WNNaSVZS_y0nkYukOBlUxGsX4gKgpj_p
     driverClassName: org.postgresql.Driver
